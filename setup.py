@@ -63,7 +63,10 @@ setup(
         "Programming Language :: Python :: 3 :: Only",
     ],
     keywords="chatbots",  # Optional
-    packages=find_packages(where="."),  # Required
+    packages=["df_engine"],  # Required
+    package_dir={
+        "df_engine": "./df_engine",
+    },
     python_requires=">=3.6, <4",
     install_requires=["pydantic>=1.8.2"],  # Optional
     cmdclass={"install": Downgrade},
