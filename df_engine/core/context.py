@@ -13,7 +13,7 @@ from typing import ForwardRef
 from typing import Any, Optional, Union
 
 from pydantic import BaseModel, validate_arguments, Field, validator
-from .types import NodeLabel2Type
+from .types import NodeLabel2Type, ServiceName
 
 logger = logging.getLogger(__name__)
 
@@ -83,11 +83,11 @@ class Context(BaseModel):
         while being validated must use this flag to take the validation mode into account.
         Otherwise the validation will not be passed.
 
-    actor_state : dict[str, Any]
-        `actor_state` or `a_s` is used every time while processing the :py:class:`~df_engine.core.context.Context`.
-        :py:class:`~df_engine.core.actor.Actor` records all its intermediate conditions into the `actor_state`.
+    service_states : dict[:py:const:`~df_engine.core.types.ServiceName`, dict[str, Any]]
+        `service_states` is used for addons states or for :py:class:`~df_engine.core.actor.Actor`'s states.
+        :py:class:`~df_engine.core.actor.Actor` records all its intermediate conditions into the `service_states`.
         After :py:class:`~df_engine.core.context.Context` processing is finished,
-        :py:class:`~df_engine.core.actor.Actor` resets `actor_state`  and
+        :py:class:`~df_engine.core.actor.Actor` resets `service_states` and
         returns :py:class:`~df_engine.core.context.Context`.
 
         * key - temporary variable name
@@ -101,7 +101,7 @@ class Context(BaseModel):
     responses: dict[int, Any] = {}
     misc: dict[str, Any] = {}
     validation: bool = False
-    actor_state: dict[str, Any] = {}
+    service_states: dict[ServiceName, dict[str, Any]] = {}
 
     # validators
     _sort_labels = validator("labels", allow_reuse=True)(sort_dict_keys)
@@ -236,9 +236,9 @@ class Context(BaseModel):
     @property
     def a_s(self) -> dict[str, Any]:
         """
-        Alias of the `actor_state`
+        Alias of the `service_states`
         """
-        return self.actor_state
+        return self.service_states
 
 
 Context.update_forward_refs()

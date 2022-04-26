@@ -29,6 +29,8 @@ NodeLabelType = Union[Callable, NodeLabelTupledType, str]
 ConditionType = Callable
 """condition type can be only callable"""
 
+ServiceName = str
+"""Service name names addon state, or your own service state. For example: `service_name = "df_db_connector"`"""
 
 # TODO: add description for each stage of ActorStage
 class ActorStage(Enum):
